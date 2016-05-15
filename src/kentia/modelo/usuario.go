@@ -1,18 +1,14 @@
 package modelo
 
-import (
-	"kentia/log"
-
-	"gopkg.in/mgo.v2/bson"
-)
+import "kentia/log"
 
 //Usuario define los valores que identifican a un usuario del sistema.
 type Usuario struct {
-	ID            bson.ObjectId `bson:"_id"`
-	Nombre        string        `form:"nombre"`
-	Correo        string        `form:"correo" binding:"required"`
-	Contraseña    string        `form:"pass" binding:"required"`
-	Genero        string        `form:"genero"`
+	ID            int    `gorm:"primary_key"`
+	Nombre        string `form:"nombre"`
+	Correo        string `form:"correo" binding:"required"`
+	Contraseña    string `form:"pass" binding:"required"`
+	Genero        string `form:"genero"`
 	Prendas       []Prenda
 	Combinaciones []Combinacion
 }
@@ -23,8 +19,7 @@ const coleccionUsuario = "usuario"
 func (u *Usuario) Registrar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	u.ID = bson.NewObjectId()
-	err := conn.db.C(coleccionUsuario).Insert(u)
+	err := conn.db.Create(u).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -36,7 +31,7 @@ func (u *Usuario) Registrar() bool {
 func (u *Usuario) Modificar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionUsuario).UpdateId(u.ID, u)
+	err := conn.db.First(u).Save(u).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -48,11 +43,10 @@ func (u *Usuario) Modificar() bool {
 func ConsultarUsuarios() (usuarios []Usuario) {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionUsuario).Find(bson.M{}).All(&usuarios)
+	err := conn.db.Model(&Usuario{}).Find(&usuarios).Error
 	if err != nil {
 		log.RegistrarError(err)
 	}
-
 	return usuarios
 }
 
@@ -60,10 +54,7 @@ func ConsultarUsuarios() (usuarios []Usuario) {
 func (u *Usuario) IniciarSesion() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	query := bson.M{"$and": []interface{}{
-		bson.M{"correo": u.Correo},
-		bson.M{"contraseña": u.Contraseña}}}
-	err := conn.db.C(coleccionUsuario).Find(query).One(u)
+	err := conn.db.Where(&Usuario{Correo: u.Correo, Contraseña: u.Contraseña}).First(u).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -75,7 +66,7 @@ func (u *Usuario) IniciarSesion() bool {
 func (u *Usuario) BuscarPorID() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionUsuario).FindId(u.ID).One(u)
+	err := conn.db.Find(u).First(u).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false

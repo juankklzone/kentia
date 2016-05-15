@@ -18,7 +18,7 @@ const coleccionTipoPrenda = "tipo_prenda"
 func (tp *TipoPrenda) Registrar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionTipoPrenda).Insert(tp)
+	err := conn.db.Create(tp).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -30,7 +30,7 @@ func (tp *TipoPrenda) Registrar() bool {
 func (tp *TipoPrenda) BuscarPorID() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionTipoPrenda).FindId(tp.ID).One(tp)
+	err := conn.db.Find(tp).First(tp).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -42,7 +42,7 @@ func (tp *TipoPrenda) BuscarPorID() bool {
 func ConsultarTiposPrenda() (tiposPrenda []TipoPrenda) {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionTipoPrenda).Find(bson.M{}).All(&tiposPrenda)
+	err := conn.db.Model(&TipoPrenda{}).Find(&tiposPrenda).Error
 	if err != nil {
 		log.RegistrarError(err)
 	}
@@ -53,7 +53,7 @@ func ConsultarTiposPrenda() (tiposPrenda []TipoPrenda) {
 func (tp *TipoPrenda) Modificar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionTipoPrenda).UpdateId(tp.ID, tp)
+	err := conn.db.First(tp).Save(tp).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false

@@ -3,13 +3,11 @@ package modelo
 import (
 	"kentia/log"
 	"time"
-
-	"gopkg.in/mgo.v2/bson"
 )
 
 //Combinacion es la estructura que definen los colores de la prenda.
 type Combinacion struct {
-	ID       bson.ObjectId `bson:"_id"`
+	ID       int `gorm:"primary_key"`
 	Prendas  []Prenda
 	FechaUso []time.Time
 	Favorito bool
@@ -21,7 +19,7 @@ const coleccionCombinacion = "combinacion"
 func (c *Combinacion) Registrar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionCombinacion).Insert(c)
+	err := conn.db.Create(c).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -33,19 +31,19 @@ func (c *Combinacion) Registrar() bool {
 func (c *Combinacion) ConsultarPorID() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionCombinacion).FindId(c.ID).One(c)
+	err := conn.db.Find(c).First(c).Error
 	if err != nil {
 		log.RegistrarError(err)
-		return true
+		return false
 	}
-	return false
+	return true
 }
 
 //Modificar se encarga de modificar la combinacion en la BD.
 func (c *Combinacion) Modificar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionCombinacion).UpdateId(c.ID, c)
+	err := conn.db.First(c).Save(c).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false

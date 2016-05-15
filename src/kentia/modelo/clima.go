@@ -1,14 +1,10 @@
 package modelo
 
-import (
-	"kentia/log"
-
-	"gopkg.in/mgo.v2/bson"
-)
+import "kentia/log"
 
 //Clima es la estructura que define los climas para los que se usará la prenda.
 type Clima struct {
-	ID     bson.ObjectId `bson:"_id"`
+	ID     int `gorm:"primary_key"`
 	Nombre string
 }
 
@@ -18,10 +14,9 @@ const coleccionClima = "clima"
 func (c *Clima) Registrar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionClima).Insert(c)
+	err := conn.db.Create(c).Error
 	if err != nil {
 		log.RegistrarError(err)
-
 		return false
 	}
 	return true
@@ -31,7 +26,7 @@ func (c *Clima) Registrar() bool {
 func (c *Clima) Modificar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionClima).UpdateId(c.ID, c)
+	err := conn.db.First(c).Save(c).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -43,7 +38,7 @@ func (c *Clima) Modificar() bool {
 func ConsultarClimas() (climas []Clima) {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionClima).Find(bson.M{}).All(&climas)
+	err := conn.db.Model(&Clima{}).Find(&climas).Error
 	if err != nil {
 		log.RegistrarError(err)
 	}
@@ -54,7 +49,7 @@ func ConsultarClimas() (climas []Clima) {
 func (c *Clima) BuscarPorID() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionClima).FindId(c.ID).One(c)
+	err := conn.db.Find(c).First(c).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false

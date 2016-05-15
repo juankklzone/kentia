@@ -1,15 +1,11 @@
 package modelo
 
-import (
-	"kentia/log"
-
-	"gopkg.in/mgo.v2/bson"
-)
+import "kentia/log"
 
 //Prenda define los datos importantes para una prenda.
 type Prenda struct {
-	ID         bson.ObjectId `bson:"_id"`
-	Brillo     int           `form:"brillo"`
+	ID         int `gorm:"primary_key"`
+	Brillo     int `form:"brillo"`
 	Foto       string
 	Color      Color
 	Clima      Clima
@@ -23,7 +19,7 @@ const coleccionPrenda = "prenda"
 func (p *Prenda) Registrar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionPrenda).Insert(p)
+	err := conn.db.Create(p).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -35,7 +31,7 @@ func (p *Prenda) Registrar() bool {
 func (p *Prenda) Modificar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionPrenda).UpdateId(p.ID, p)
+	err := conn.db.First(p).Save(p).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -47,7 +43,7 @@ func (p *Prenda) Modificar() bool {
 func ConsultarPrendas() (prendas []Prenda) {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionPrenda).Find(bson.M{}).All(&prendas)
+	err := conn.db.Model(&Prenda{}).Find(&prendas).Error
 	if err != nil {
 		log.RegistrarError(err)
 	}
@@ -58,7 +54,7 @@ func ConsultarPrendas() (prendas []Prenda) {
 func (p *Prenda) BuscarPorID() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionPrenda).FindId(p.ID).One(p)
+	err := conn.db.Find(p).First(p).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false

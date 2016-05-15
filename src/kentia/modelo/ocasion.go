@@ -1,15 +1,10 @@
 package modelo
 
-import (
-	"fmt"
-	"kentia/log"
-
-	"gopkg.in/mgo.v2/bson"
-)
+import "kentia/log"
 
 //Ocasion estructura para conocer la ocasion en que se usará la prenda.
 type Ocasion struct {
-	ID     bson.ObjectId `bson:"_id"`
+	ID     int `gorm:"primary_key"`
 	Nombre string
 }
 
@@ -19,7 +14,7 @@ const coleccionOcasion = "ocasion"
 func (c *Ocasion) Registrar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionOcasion).Insert(c)
+	err := conn.db.Create(c).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -31,7 +26,7 @@ func (c *Ocasion) Registrar() bool {
 func (c *Ocasion) Modificar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionOcasion).UpdateId(c.ID, c)
+	err := conn.db.First(c).Save(c).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -43,20 +38,18 @@ func (c *Ocasion) Modificar() bool {
 func ConsultarOcasiones() (ocasiones []Ocasion) {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionOcasion).Find(bson.M{}).All(&ocasiones)
+	err := conn.db.Model(&Ocasion{}).Find(&ocasiones).Error
 	if err != nil {
 		log.RegistrarError(err)
 	}
-	fmt.Println(ocasiones)
-
-	return ocasiones
+	return colores
 }
 
 //BuscarPorID busca en la BD un ocasion que coincida con el ID dado.
 func (c *Ocasion) BuscarPorID() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionOcasion).FindId(c.ID).One(c)
+	err := conn.db.Find(c).First(c).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false

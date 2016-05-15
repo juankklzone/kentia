@@ -1,15 +1,11 @@
 package modelo
 
-import (
-	"kentia/log"
-
-	"gopkg.in/mgo.v2/bson"
-)
+import "kentia/log"
 
 //Color es la estructura que definen los colores de la prenda.
 type Color struct {
-	ID     bson.ObjectId `bson:"_id"`
-	Tono   int           `form:"tono" binding:"required"`
+	ID     int `gorm:"primary_key"`
+	Tono   int `form:"tono" binding:"required"`
 	Nombre string
 }
 
@@ -19,7 +15,7 @@ const coleccionColor = "color"
 func (c *Color) Registrar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionColor).Insert(c)
+	err := conn.db.Create(c).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -31,7 +27,7 @@ func (c *Color) Registrar() bool {
 func (c *Color) Modificar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionColor).UpdateId(c.ID, c)
+	err := conn.db.First(c).Save(c).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -43,11 +39,10 @@ func (c *Color) Modificar() bool {
 func ConsultarColores() (colores []Color) {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionColor).Find(bson.M{}).All(&colores)
+	err := conn.db.Model(&Color{}).Find(&colores).Error
 	if err != nil {
 		log.RegistrarError(err)
 	}
-
 	return colores
 }
 
@@ -55,7 +50,7 @@ func ConsultarColores() (colores []Color) {
 func (c *Color) BuscarPorID() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionColor).FindId(c.ID).One(c)
+	err := conn.db.Find(c).First(c).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -67,7 +62,7 @@ func (c *Color) BuscarPorID() bool {
 func (c *Color) BuscarPorTono() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.C(coleccionColor).Find(bson.M{"tono": c.Tono}).One(c)
+	err := conn.db.Where(c.Tono).Find(c).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
