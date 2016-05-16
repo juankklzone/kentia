@@ -5,17 +5,16 @@ import (
 
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"gopkg.in/mgo.v2/bson"
 )
 
 //GetSession obtiene el valor bson.ObjectId de la sesion actual.
-func GetSession(session interface{}) bson.ObjectId {
-	var mySession bson.ObjectId
+func GetSession(session interface{}) string {
+	mySession := ""
 	switch session.(type) {
 	default:
 		mySession = "0"
 	case string:
-		mySession = bson.ObjectIdHex(session.(string))
+		mySession = session.(string)
 	}
 	return mySession
 }

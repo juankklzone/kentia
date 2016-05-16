@@ -25,7 +25,7 @@ func (mapa MapaInfo) ObtenerDatosRegistroPrenda() {
 }
 
 //ObtenerDatosCombinacion obtiene los datos para mostrar en el template.
-func (mapa MapaInfo) ObtenerDatosCombinacion(usuarioID string) {
+func (mapa MapaInfo) ObtenerDatosCombinacion(usuarioID int) {
 	mapa.SetInformacion(
 		"mejores", GenerarMejorCombinacion(usuarioID),
 	)

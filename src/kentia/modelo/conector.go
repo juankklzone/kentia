@@ -1,6 +1,7 @@
 package modelo
 
 import (
+	"fmt"
 	//required for mysql conn
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
@@ -17,6 +18,7 @@ const dburl = "root:@/kentia?charset=utf8&parseTime=True&loc=Local"
 func conectar() (c *conector) {
 	bd, err := gorm.Open("mysql", dburl)
 	if err != nil {
+		fmt.Println(err)
 		return nil
 	}
 	return &conector{db: bd}

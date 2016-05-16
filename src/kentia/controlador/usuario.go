@@ -21,7 +21,7 @@ func Login(html *template.Template) gin.HandlerFunc {
 		if !isOk {
 			session.Set("UsuarioID", "0")
 		}
-		session.Set("UsuarioID", usuario.ID.Hex())
+		session.Set("UsuarioID", usuario.ID)
 		session.Save()
 		c.Redirect(http.StatusSeeOther, "/")
 		return
@@ -36,7 +36,7 @@ func RegistroUsuario() gin.HandlerFunc {
 			if u.Registrar() {
 				//Correcto
 				session := sessions.Default(c)
-				session.Set("UsuarioID", u.ID.Hex())
+				session.Set("UsuarioID", u.ID)
 				session.Save()
 				c.Redirect(http.StatusSeeOther, "/")
 				return

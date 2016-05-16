@@ -3,13 +3,9 @@ package controlador
 import (
 	"fmt"
 	"html/template"
-	"io/ioutil"
 	"kentia/modelo"
-	"net/http"
-	"os"
+	"strconv"
 	"strings"
-
-	"gopkg.in/mgo.v2/bson"
 
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -21,7 +17,7 @@ func convertirID(s string) string {
 }
 
 func guadarImagen(c *gin.Context, p *modelo.Prenda) {
-	file, _, err := c.Request.FormFile("foto")
+	/*file, _, err := c.Request.FormFile("foto")
 	if err != nil {
 		c.String(http.StatusSeeOther, "Sin imagen")
 		return
@@ -30,10 +26,11 @@ func guadarImagen(c *gin.Context, p *modelo.Prenda) {
 
 	data, _ := ioutil.ReadAll(file)
 
-	ruta := "/img/foto" + p.ID.Hex() + ".png"
-	p.Foto = ruta
+	ruta := "/img/foto" + p.ID.Hex() + ".png"*/
+	ruta, _ := c.Get("foto")
+	p.Foto = ruta.(string)
 
-	out, err := os.Create("public" + p.Foto)
+	/*out, err := os.Create("public" + p.Foto)
 	if err != nil {
 		c.String(http.StatusTemporaryRedirect, err.Error())
 		return
@@ -44,28 +41,29 @@ func guadarImagen(c *gin.Context, p *modelo.Prenda) {
 		c.String(http.StatusTemporaryRedirect, err.Error())
 		return
 	}
-	defer out.Close()
+	defer out.Close()*/
 }
 
 //RegistroPrendaPOST recibe el formulario y se encarga de registrarlo en la BD.
 func RegistroPrendaPOST() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		usuarioID := GetSession(sessions.Default(c).Get("UsuarioID"))
+		uID, _ := strconv.Atoi(usuarioID)
 		if usuarioID != "0" {
 			var p modelo.Prenda
 			if c.Bind(&p) == nil {
-				u := modelo.Usuario{ID: usuarioID}
+				u := modelo.Usuario{ID: uID}
 				if u.BuscarPorID() {
-					p.ID = bson.NewObjectId()
+					//p.ID = bson.NewObjectId()
 					p.Color.BuscarPorTono()
 
-					p.Clima.ID = bson.ObjectIdHex(convertirID(c.PostForm("clima")))
+					p.Clima.ID, _ = strconv.Atoi(c.PostForm("clima"))
 					p.Clima.BuscarPorID()
 
-					p.TipoPrenda.ID = bson.ObjectIdHex(convertirID(c.PostForm("tipoPrenda")))
+					p.TipoPrenda.ID, _ = strconv.Atoi(c.PostForm("tipoPrenda"))
 					p.TipoPrenda.BuscarPorID()
 
-					p.Ocasion.ID = bson.ObjectIdHex(convertirID(c.PostForm("ocasion")))
+					p.Ocasion.ID, _ = strconv.Atoi(c.PostForm("ocasion"))
 					p.Ocasion.BuscarPorID()
 
 					guadarImagen(c, &p)

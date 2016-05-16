@@ -6,11 +6,10 @@ import (
 	"kentia/genetico"
 	"kentia/modelo"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
-
-	"gopkg.in/mgo.v2/bson"
 )
 
 //GenerarCombinacionGET maneja la ruta /generarCombinacion
@@ -20,7 +19,8 @@ func GenerarCombinacionGET(html *template.Template) gin.HandlerFunc {
 		usuarioID := GetSession(session.Get("UsuarioID"))
 		if usuarioID != "0" {
 			mapa := MapaInfo{}
-			mapa.ObtenerDatosCombinacion(usuarioID.Hex())
+			id, _ := strconv.Atoi(usuarioID)
+			mapa.ObtenerDatosCombinacion(id)
 			fmt.Println(mapa)
 			html.ExecuteTemplate(c.Writer, "combinacion.html", mapa)
 			return
@@ -31,8 +31,8 @@ func GenerarCombinacionGET(html *template.Template) gin.HandlerFunc {
 }
 
 //GenerarMejorCombinacion se encarga de buscar cada una de las prendas por color y birllo para generar una combinacion.
-func GenerarMejorCombinacion(usuarioID string) (prendas [][]modelo.Prenda) {
-	u := modelo.Usuario{ID: bson.ObjectIdHex(usuarioID)}
+func GenerarMejorCombinacion(usuarioID int) (prendas [][]modelo.Prenda) {
+	u := modelo.Usuario{ID: usuarioID}
 	u.BuscarPorID()
 	mejores := genetico.Genetico(u.ConsultarColoresPrendas())
 	for _, mejor := range mejores {

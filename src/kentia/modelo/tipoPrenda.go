@@ -1,14 +1,10 @@
 package modelo
 
-import (
-	"kentia/log"
-
-	"gopkg.in/mgo.v2/bson"
-)
+import "kentia/log"
 
 //TipoPrenda es la estructura que define el tipo de prenda(Calzado,Pantalon,Camisa,Chamarra) para los que se usara la prenda
 type TipoPrenda struct {
-	ID     bson.ObjectId `bson:"_id"`
+	ID     int `gorm:"primary_key"`
 	Nombre string
 }
 
