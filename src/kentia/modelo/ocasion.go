@@ -42,7 +42,7 @@ func ConsultarOcasiones() (ocasiones []Ocasion) {
 	if err != nil {
 		log.RegistrarError(err)
 	}
-	return colores
+	return ocasiones
 }
 
 //BuscarPorID busca en la BD un ocasion que coincida con el ID dado.
