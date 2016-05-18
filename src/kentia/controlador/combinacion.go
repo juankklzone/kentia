@@ -5,7 +5,6 @@ import (
 	"html/template"
 	"kentia/genetico"
 	"kentia/modelo"
-	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/contrib/sessions"
@@ -17,15 +16,16 @@ func GenerarCombinacionGET(html *template.Template) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		usuarioID := GetSession(session.Get("UsuarioID"))
-		if usuarioID != "0" {
-			mapa := MapaInfo{}
-			id, _ := strconv.Atoi(usuarioID)
-			mapa.ObtenerDatosCombinacion(id)
-			fmt.Println(mapa)
-			html.ExecuteTemplate(c.Writer, "combinacion.html", mapa)
-			return
-		}
-		c.Redirect(http.StatusTemporaryRedirect, "/")
+		fmt.Println("usuario en la sesion", usuarioID)
+		//if usuarioID != "0"
+		mapa := MapaInfo{}
+		id, _ := strconv.Atoi(usuarioID)
+		mapa.ObtenerDatosCombinacion(id)
+		fmt.Println("datos para la combinación", mapa)
+		html.ExecuteTemplate(c.Writer, "combinacion.html", mapa)
+		return
+		/*}
+		c.Redirect(http.StatusTemporaryRedirect, "/")*/
 		return
 	}
 }

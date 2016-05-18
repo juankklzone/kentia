@@ -19,7 +19,7 @@ const coleccionUsuario = "usuario"
 func (u *Usuario) Registrar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.Create(u).Error
+	err := conn.db.Debug().Create(u).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false

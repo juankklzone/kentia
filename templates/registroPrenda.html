@@ -56,28 +56,15 @@
              <legend>En este apartado podrá agregar y clasificar su ropa para que podamos darte sugerencias más adelante.<br><br></legend>
           </div>
         </div>
-
-        <div class="row">
-          <div class="col-lg-5 col-lg-offset-1">
-            <div class="row">
-                <label for="fotos" class="col-lg-6 control-label">Selecciona la foto de la prenda</label>
-                <br><br>
-                <input type="file" id="fotos" name="foto" accept="image/*"/>
-            </div>
-            <br>
-            <div class="row">
-              <div id="drop_zone"><br /><center>Arrastra y suelta tu foto aqui</center></div><br>
-            </div>
-          </div>
-          <div class="col-lg-5 col-lg-offset-1">
-              <output id="list"></output>
-              <br>
-          </div>
-        </div>
-
         <div class="row">
           <div class="col-lg-12">
                 <fieldset>
+                  <div class="form-group">
+                    <label for="select" class="col-lg-3 control-label">Ingresa la URL de la foto de la prenda:</label>
+                    <div class="col-lg-7">
+                      <input type="text" name="tipoPrenda" class="form-control">
+                    </div>
+                  </div>
                   <div class="form-group">
                     <label for="select" class="col-lg-3 control-label">¿Qué tipo de prenda es?</label>
                     <div class="col-lg-7">
@@ -215,7 +202,7 @@
               reader.readAsDataURL(f);
             }
         }
-        document.getElementById('fotos').addEventListener('change', archivo, false);
+        //document.getElementById('fotos').addEventListener('change', archivo, false);
       </script>
 
 <script>
@@ -243,10 +230,10 @@
   }
 
   // Setup the dnd listeners.
-  var dropZone = document.getElementById('drop_zone');
+  /*var dropZone = document.getElementById('drop_zone');
   dropZone.addEventListener('dragover', handleDragOver, false);
   dropZone.addEventListener('drop', handleFileSelect, false);
-
+*/
   $('#paleta').mapster({
             fillColor: 'ffffff',
             fillOpacity: 0.1,
@@ -317,6 +304,6 @@ $("#checkmez").on("click", function() {
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
   </body>
 </html>

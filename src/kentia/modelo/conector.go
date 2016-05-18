@@ -9,7 +9,7 @@ import (
 
 //Conector Go -> Mysql que permite obtener sesiones en una bd.
 type conector struct {
-	db gorm.DB
+	db *gorm.DB
 }
 
 const dburl = "root:@/kentia?charset=utf8&parseTime=True&loc=Local"

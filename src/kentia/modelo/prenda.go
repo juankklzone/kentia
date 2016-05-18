@@ -1,10 +1,14 @@
 package modelo
 
-import "kentia/log"
+import (
+	"kentia/log"
+
+	"github.com/jinzhu/gorm"
+)
 
 //Prenda define los datos importantes para una prenda.
 type Prenda struct {
-	ID         int `gorm:"primary_key"`
+	gorm.Model
 	Brillo     int `form:"brillo"`
 	Foto       string
 	Color      Color
