@@ -1,7 +1,6 @@
 package controlador
 
 import (
-	"fmt"
 	"html/template"
 	"kentia/modelo"
 	"strconv"
@@ -45,7 +44,7 @@ func guadarImagen(c *gin.Context, p *modelo.Prenda) {
 }
 
 //RegistroPrendaPOST recibe el formulario y se encarga de registrarlo en la BD.
-func RegistroPrendaPOST() gin.HandlerFunc {
+/*func RegistroPrendaPOST() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		usuarioID := GetSession(sessions.Default(c).Get("UsuarioID"))
 		fmt.Println("usuarioID", usuarioID)
@@ -56,16 +55,16 @@ func RegistroPrendaPOST() gin.HandlerFunc {
 			u := modelo.Usuario{ID: uID}
 			if u.BuscarPorID() {
 				//p.ID = bson.NewObjectId()
+				p.Color =
 				p.Color.BuscarPorTono()
 
 				p.Clima.ID, _ = strconv.Atoi(c.PostForm("clima"))
 				p.Clima.BuscarPorID()
+				p.TipoPrendaID, _ = strconv.Atoi(c.PostForm("tipoPrenda"))
+				//				p.TipoPrenda.BuscarPorID()
 
-				p.TipoPrenda.ID, _ = strconv.Atoi(c.PostForm("tipoPrenda"))
-				p.TipoPrenda.BuscarPorID()
-
-				p.Ocasion.ID, _ = strconv.Atoi(c.PostForm("ocasion"))
-				p.Ocasion.BuscarPorID()
+				p.OcasionID, _ = strconv.Atoi(c.PostForm("ocasion"))
+				//p.Ocasion.BuscarPorID()
 
 				guadarImagen(c, &p)
 
@@ -79,17 +78,10 @@ func RegistroPrendaPOST() gin.HandlerFunc {
 					c.Redirect(302, "/")
 				}
 			} else {
-				//No se encontró el usuario D:
-				fmt.Println("user not found", u)
-				c.Redirect(302, "/404")
+				fmt.Println("Algo salió mal")
 			}
-		} else {
-			fmt.Println("Algo salió mal")
+			return
 		}
-		return
-		/*}
-		c.Redirect(302, "/")
-		return*/
 	}
 }
 
@@ -98,5 +90,15 @@ func RegistroPrendaGET(html *template.Template) gin.HandlerFunc {
 		mapa := MapaInfo{}
 		mapa.ObtenerDatosRegistroPrenda()
 		html.ExecuteTemplate(c.Writer, "registroPrenda.html", mapa)
+	}
+}
+*/
+func MuestraPrendasGET(html *template.Template) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		mapa := MapaInfo{}
+		usuarioID := GetSession(sessions.Default(c).Get("UsuarioID"))
+		idusr, _ := strconv.Atoi(usuarioID)
+		mapa.ObtenerDatosPrendas(idusr)
+		html.ExecuteTemplate(c.Writer, "principal.html", mapa)
 	}
 }

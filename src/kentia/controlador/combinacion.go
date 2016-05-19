@@ -23,9 +23,7 @@ func GenerarCombinacionGET(html *template.Template) gin.HandlerFunc {
 		mapa.ObtenerDatosCombinacion(id)
 		fmt.Println("datos para la combinación", mapa)
 		html.ExecuteTemplate(c.Writer, "combinacion.html", mapa)
-		return
-		/*}
-		c.Redirect(http.StatusTemporaryRedirect, "/")*/
+		//c.Redirect(http.StatusTemporaryRedirect, "/")
 		return
 	}
 }
@@ -37,11 +35,11 @@ func GenerarMejorCombinacion(usuarioID int) (prendas [][]modelo.Prenda) {
 	mejores := genetico.Genetico(u.ConsultarColoresPrendas())
 	for _, mejor := range mejores {
 		var combinacion []modelo.Prenda
-		for i, color := range mejor.Genotipo {
+		for _, color := range mejor.Genotipo {
 			prenda := modelo.Prenda{}
 			prenda.Brillo = color.Brillo
-			prenda.Color.Tono = color.Tono
-			switch i {
+			//prenda.Color.Tono = color.Tono
+			/*switch i {
 			case 0:
 				prenda.TipoPrenda.Nombre = "Calzado"
 			case 1:
@@ -50,7 +48,7 @@ func GenerarMejorCombinacion(usuarioID int) (prendas [][]modelo.Prenda) {
 				prenda.TipoPrenda.Nombre = "Playera"
 			case 3:
 				prenda.TipoPrenda.Nombre = "Chamarra"
-			}
+			}*/
 			prenda.BuscarPorBrilloTono(u.Prendas)
 			combinacion = append(combinacion, prenda)
 		}
