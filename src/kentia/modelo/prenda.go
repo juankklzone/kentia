@@ -1,20 +1,17 @@
 package modelo
 
-import (
-	"kentia/log"
-
-	"github.com/jinzhu/gorm"
-)
+import "kentia/log"
 
 //Prenda define los datos importantes para una prenda.
 type Prenda struct {
-	gorm.Model
-	Brillo     int `form:"brillo"`
-	Foto       string
-	Color      Color
-	Clima      Clima
-	TipoPrenda TipoPrenda
-	Ocasion    Ocasion
+	ID           int `gorm:"primary_key"`
+	Brillo       int `form:"brillo"`
+	Foto         string
+	ColorID      int
+	ClimaID      int
+	TipoPrendaID int
+	OcasioniD    int
+	UsuarioID    int
 }
 
 const coleccionPrenda = "prenda"
@@ -68,8 +65,16 @@ func (p *Prenda) BuscarPorID() bool {
 
 //BuscarPorBrilloTono busca en la BD un color que coincida con el tono y el brillo.
 func (p *Prenda) BuscarPorBrilloTono(prendas []Prenda) bool {
+	colorOriginal := Color{ID: p.ColorID}
+	colorOriginal.BuscarPorID()
+	tipoOriginal := TipoPrenda{ID: p.TipoPrendaID}
+	tipoOriginal.BuscarPorID()
 	for _, prenda := range prendas {
-		if p.TipoPrenda.Nombre == prenda.TipoPrenda.Nombre && p.Color.Tono == prenda.Color.Tono && p.Brillo == prenda.Brillo {
+		colorBusqueda := Color{ID: prenda.ColorID}
+		colorBusqueda.BuscarPorID()
+		tipoBusqueda := TipoPrenda{ID: prenda.TipoPrendaID}
+		tipoBusqueda.BuscarPorID()
+		if tipoOriginal.Nombre == tipoBusqueda.Nombre && colorOriginal.Tono == colorBusqueda.Tono && p.Brillo == prenda.Brillo {
 			*p = prenda
 			return true
 		}
