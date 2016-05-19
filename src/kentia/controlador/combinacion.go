@@ -1,7 +1,6 @@
 package controlador
 
 import (
-	"fmt"
 	"html/template"
 	"kentia/genetico"
 	"kentia/modelo"
@@ -21,7 +20,7 @@ func GenerarCombinacionGET(html *template.Template) gin.HandlerFunc {
 		if usuarioID != "0" {
 			mapa := MapaInfo{}
 			mapa.ObtenerDatosCombinacion(usuarioID.Hex())
-			fmt.Println(mapa)
+			//fmt.Println(mapa)
 			html.ExecuteTemplate(c.Writer, "combinacion.html", mapa)
 			return
 		}
