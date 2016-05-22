@@ -5,7 +5,6 @@ import (
 	"html/template"
 	"kentia/genetico"
 	"kentia/modelo"
-	"strconv"
 
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -17,10 +16,11 @@ func GenerarCombinacionGET(html *template.Template) gin.HandlerFunc {
 		session := sessions.Default(c)
 		usuarioID := GetSession(session.Get("UsuarioID"))
 		fmt.Println("usuario en la sesion", usuarioID)
-		//if usuarioID != "0"
 		mapa := MapaInfo{}
-		id, _ := strconv.Atoi(usuarioID)
-		mapa.ObtenerDatosCombinacion(id)
+
+		//id, _ := strconv.Atoi(usuarioID)
+		ids := []int{1, 2, 3}
+		mapa.ObtenerDatosCombinacion(ids)
 		fmt.Println("datos para la combinación", mapa)
 		html.ExecuteTemplate(c.Writer, "combinacion.html", mapa)
 		//c.Redirect(http.StatusTemporaryRedirect, "/")
@@ -29,10 +29,10 @@ func GenerarCombinacionGET(html *template.Template) gin.HandlerFunc {
 }
 
 //GenerarMejorCombinacion se encarga de buscar cada una de las prendas por color y birllo para generar una combinacion.
-func GenerarMejorCombinacion(usuarioID int) (prendas [][]modelo.Prenda) {
-	u := modelo.Usuario{ID: usuarioID}
-	u.BuscarPorID()
-	mejores := genetico.Genetico(u.ConsultarColoresPrendas())
+func GenerarMejorCombinacion(idsPrendas []int) (prendas [][]modelo.Prenda) {
+	prendasSel := modelo.ObtenerPrendas(idsPrendas)
+	coloresPrendas := modelo.ConsultarColoresPrendas(prendasSel)
+	mejores := genetico.GeneticoMultiple(coloresPrendas, prendasSel)
 	for _, mejor := range mejores {
 		var combinacion []modelo.Prenda
 		for _, color := range mejor.Genotipo {
@@ -49,7 +49,7 @@ func GenerarMejorCombinacion(usuarioID int) (prendas [][]modelo.Prenda) {
 			case 3:
 				prenda.TipoPrenda.Nombre = "Chamarra"
 			}*/
-			prenda.BuscarPorBrilloTono(u.Prendas)
+			//prenda.BuscarPorBrilloTono(u.Prendas)
 			combinacion = append(combinacion, prenda)
 		}
 		prendas = append(prendas, combinacion)

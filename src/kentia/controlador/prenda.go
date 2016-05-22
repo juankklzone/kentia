@@ -3,10 +3,8 @@ package controlador
 import (
 	"html/template"
 	"kentia/modelo"
-	"strconv"
 	"strings"
 
-	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -96,9 +94,7 @@ func RegistroPrendaGET(html *template.Template) gin.HandlerFunc {
 func MuestraPrendasGET(html *template.Template) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		mapa := MapaInfo{}
-		usuarioID := GetSession(sessions.Default(c).Get("UsuarioID"))
-		idusr, _ := strconv.Atoi(usuarioID)
-		mapa.ObtenerDatosPrendas(idusr)
+		mapa.ObtenerDatosPrendas()
 		html.ExecuteTemplate(c.Writer, "principal.html", mapa)
 	}
 }
