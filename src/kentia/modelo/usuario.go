@@ -71,6 +71,8 @@ func (u *Usuario) BuscarPorID() bool {
 	conn := conectar()
 	defer conn.desconectar()
 	err := conn.db.Find(u).First(u).Error
+	conn.db.Model(u).Related(&u.Prendas)
+	conn.db.Model(u).Related(&u.Combinaciones)
 	if err != nil {
 		log.RegistrarError(err)
 		return false

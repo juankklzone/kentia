@@ -26,21 +26,23 @@ func (mapa MapaInfo) ObtenerDatosRegistroPrenda() {
 }
 
 //ObtenerDatosCombinacion obtiene los datos para mostrar en el template.
-func (mapa MapaInfo) ObtenerDatosCombinacion(usuarioID int) {
+func (mapa MapaInfo) ObtenerDatosCombinacion(idsPrendas []int) {
 	mapa.SetInformacion(
-		"mejores", GenerarMejorCombinacion(usuarioID),
+		"mejores", GenerarMejorCombinacion(idsPrendas),
 	)
 }
 
-//ObtenDatosPrendas obtiene las prendas de un usuario
-func (mapa MapaInfo) ObtenerDatosPrendas(usuarioID int) {
-	usr := modelo.Usuario{ID: usuarioID}
-	ok := usr.BuscarPorID()
+//ObtenDatosPrendas obtiene todas las prendas
+func (mapa MapaInfo) ObtenerDatosPrendas() {
+	fem := modelo.Usuario{ID: 1}
+	ok := fem.BuscarPorID()
 	if !ok {
 		fmt.Println("puto!")
 	}
-	fmt.Print(usr)
+	fmt.Print(fem)
+	masc := modelo.Usuario{ID: 2}
+	masc.BuscarPorID()
 	mapa.SetInformacion(
-		"prendas", usr.Prendas,
+		"prendas", append(masc.Prendas, fem.Prendas...),
 	)
 }
