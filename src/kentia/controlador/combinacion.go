@@ -19,7 +19,7 @@ func GenerarCombinacionGET(html *template.Template) gin.HandlerFunc {
 		mapa := MapaInfo{}
 
 		//id, _ := strconv.Atoi(usuarioID)
-		ids := []int{1, 2, 3}
+		ids := []int{2}
 		mapa.ObtenerDatosCombinacion(ids)
 		fmt.Println("datos para la combinación", mapa)
 		html.ExecuteTemplate(c.Writer, "combinacion.html", mapa)
@@ -33,13 +33,16 @@ func GenerarMejorCombinacion(idsPrendas []int) (prendas [][]modelo.Prenda) {
 	prendasSel := modelo.ObtenerPrendas(idsPrendas)
 	coloresPrendas := modelo.ConsultarColoresPrendas(prendasSel)
 	mejores := genetico.GeneticoMultiple(coloresPrendas, prendasSel)
-
+	fem := modelo.Usuario{ID: 1}
+	fem.BuscarPorID()
 	for _, mejor := range mejores {
 		var combinacion []modelo.Prenda
 		for _, color := range mejor.Genotipo {
+			fmt.Println(color)
 			prenda := modelo.Prenda{}
+			prenda.ID = color.IDPrenda
 			prenda.Brillo = color.Brillo
-			//prenda.Color.Tono = color.Tono
+			prenda.ColorID = color.Tono
 			/*switch i {
 			case 0:
 				prenda.TipoPrenda.Nombre = "Calzado"
@@ -50,10 +53,12 @@ func GenerarMejorCombinacion(idsPrendas []int) (prendas [][]modelo.Prenda) {
 			case 3:
 				prenda.TipoPrenda.Nombre = "Chamarra"
 			}*/
-			//prenda.BuscarPorBrilloTono(u.Prendas)
+			prenda.BuscaPorIDEnCatalogo(fem.Prendas)
 			combinacion = append(combinacion, prenda)
 		}
 		prendas = append(prendas, combinacion)
 	}
+
+	fmt.Println(prendas)
 	return prendas
 }

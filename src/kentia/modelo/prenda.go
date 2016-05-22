@@ -82,6 +82,16 @@ func (p *Prenda) BuscarPorBrilloTono(prendas []Prenda) bool {
 	return false
 }
 
+//BuscaPorIDEnCatalogo trae lo que nos interesa de las prendas
+func (p *Prenda) BuscaPorIDEnCatalogo(prendas []Prenda) {
+	for _, prenda := range prendas {
+		if p.ID == prenda.ID {
+			*p = prenda
+			return
+		}
+	}
+}
+
 //ObtenerPrendas devuelve n prendas solicitadas
 func ObtenerPrendas(ids []int) (prendas []Prenda) {
 	prendas = make([]Prenda, len(ids))

@@ -39,13 +39,13 @@ func crearPoblacion(cp modelo.ColoresPrendas) (pob poblacion) {
 	return pob
 }
 
-func (p poblacion) mutarEvaluar(cp modelo.ColoresPrendas, pr modelo.Prenda) poblacion {
+func (p poblacion) mutarEvaluar(cp modelo.ColoresPrendas, fc modelo.FormaColor, tipoID int) poblacion {
 	for i := range p {
 		prob := rand.Float64()
 		if prob <= pm {
 			p[i].mutar(cp)
 		}
-		p[i].fijarPrenda(pr)
+		p[i].Genotipo[tipoID] = fc
 		p[i].evaluar()
 	}
 	return p
@@ -93,10 +93,10 @@ func (p poblacion) crearHijos() (hijos poblacion) {
 func Genetico(cp modelo.ColoresPrendas, prfija modelo.Prenda) []Individuo {
 	pob := crearPoblacion(cp)
 	ordenar(&pob)
+	foColor := prfija.ConsultarFormaColorPrenda()
 	for i := 0; i < generaciones; i++ {
 		hijos := pob.crearHijos()
-		hijos = hijos.mutarEvaluar(cp, prfija)
-
+		hijos = hijos.mutarEvaluar(cp, foColor, prfija.TipoPrendaID)
 		pob = append(pob, hijos...)
 		pob = pob.elegirMejores()
 		fmt.Println("\nMejor generacion ", (i + 1))
@@ -110,9 +110,9 @@ func GeneticoMultiple(cp modelo.ColoresPrendas, prendasFijadas []modelo.Prenda) 
 	var prendas []Individuo
 	mtx := new(sync.Mutex)
 	wg := new(sync.WaitGroup)
-	wg.Add(len(prendas))
-	fmt.Println("iniciando ", len(prendas), " geneticos")
-	for i := range prendas {
+	wg.Add(len(prendasFijadas))
+	fmt.Println("iniciando ", len(prendasFijadas), " geneticos")
+	for i := range prendasFijadas {
 		go func(prenda modelo.Prenda) {
 			individuos := Genetico(cp, prenda)
 			mtx.Lock()
