@@ -32,7 +32,9 @@ func GenerarCombinacionGET(html *template.Template) gin.HandlerFunc {
 func GenerarMejorCombinacion(usuarioID int) (prendas [][]modelo.Prenda) {
 	u := modelo.Usuario{ID: usuarioID}
 	u.BuscarPorID()
-	mejores := genetico.Genetico(u.ConsultarColoresPrendas())
+	arr := []int{1}
+	prenda := modelo.ObtenerPrendas(arr)
+	mejores := genetico.Genetico(modelo.ConsultarColoresPrendas(prenda), prenda[0])
 	for _, mejor := range mejores {
 		var combinacion []modelo.Prenda
 		for _, color := range mejor.Genotipo {
