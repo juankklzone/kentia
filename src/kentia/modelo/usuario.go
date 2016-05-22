@@ -47,6 +47,10 @@ func ConsultarUsuarios() (usuarios []Usuario) {
 	if err != nil {
 		log.RegistrarError(err)
 	}
+	for i := range usuarios {
+		conn.db.Model(&usuarios[i]).Related(&usuarios[i].Prendas)
+		conn.db.Model(&usuarios[i]).Related(&usuarios[i].Combinaciones)
+	}
 	return usuarios
 }
 

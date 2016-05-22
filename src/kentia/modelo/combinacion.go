@@ -7,11 +7,14 @@ import (
 
 //Combinacion es la estructura que definen los colores de la prenda.
 type Combinacion struct {
-	ID        int `gorm:"primary_key"`
-	Prendas   []Prenda
-	FechaUso  []time.Time
-	Favorito  bool
-	UsuarioID int
+	ID         int `gorm:"primary_key"`
+	CalzadoID  int
+	PantalonID int
+	PlayeraID  int
+	ChamarraID int
+	FechaUso   []time.Time
+	Favorito   bool
+	UsuarioID  int
 }
 
 const coleccionCombinacion = "combinacion"
