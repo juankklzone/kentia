@@ -54,7 +54,7 @@
                   <div class="row">
                       <div class="col-lg-12">
                         {{range $prendas}}
-                          <img src="{{.Foto}}" width="150" height="150"/>
+                          <img src="{{.Foto}}" onclick="javascript:seleccionarImagen({{.ID}})" prendaid={{.ID}} color={{.ColorID}} ocasion={{.OcasioniD}} genero={{.UsuarioID}} tipo={{.TipoPrendaID}} width="150" height="150"/>
                         {{end}}
                           <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
                           <button onclick="javascript:location.href='/generarCombinacion'" class="btn btn-primary">Generar combinación</button>
@@ -79,6 +79,52 @@
           e.preventDefault();
           $("#wrapper").toggleClass("toggled");
       });
+      
+      function mostrarPrendasMasc(){
+          $("img[genero='1']").hide();
+          $("img[genero='2']").show();
+      }
+      
+      function mostrarPrendasFem(){
+          $("img[genero='2']").hide();
+          $("img[genero='1']").show();
+      }
+      
+      function filtrarColor(colorID){
+          if (colorID == -1){
+              for (var i =0;i<20;i++){
+                  $("img[color='"+i+"']").show();
+              } 
+          } else{
+              for (var i =0;i<20;i++){
+                  $("img[color='"+i+"']").hide();
+              } 
+              $("img[color='"+colorID+"']").show();
+          }
+      }
+      
+       function filtrarTipo(tipo){
+          if (tipo == -1){
+              for (var i =1;i<5;i++){
+                  $("img[tipo='"+i+"']").show();
+              } 
+          } else{
+              for (var i =0;i<5;i++){
+                  $("img[tipo='"+i+"']").hide();
+              } 
+              $("img[tipo='"+tipo+"']").show();
+          }
+      }
+      var listaSeleccionados = [];
+      
+      function seleccionarImagen(id){
+        listaSeleccionados.push(id);
+        console.log(listaSeleccionados);
+      }
+      
+      function limpiarSeleccion(id){
+          listaSeleccionados = [];
+      }
       </script>
 
   </body>

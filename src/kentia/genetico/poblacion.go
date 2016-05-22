@@ -111,6 +111,7 @@ func GeneticoMultiple(cp modelo.ColoresPrendas, prendasFijadas []modelo.Prenda) 
 	mtx := new(sync.Mutex)
 	wg := new(sync.WaitGroup)
 	wg.Add(len(prendas))
+	fmt.Println("iniciando ", len(prendas), " geneticos")
 	for i := range prendas {
 		go func(prenda modelo.Prenda) {
 			individuos := Genetico(cp, prenda)
@@ -118,6 +119,8 @@ func GeneticoMultiple(cp modelo.ColoresPrendas, prendasFijadas []modelo.Prenda) 
 			prendas = append(prendas, individuos...)
 			mtx.Unlock()
 			wg.Done()
+			fmt.Println("terminando con prenda fijada", prenda)
+			fmt.Println("prendas guardadas ", prendas)
 		}(prendasFijadas[i])
 	}
 	wg.Wait()
