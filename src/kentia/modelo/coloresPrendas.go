@@ -39,8 +39,12 @@ func (p ColoresPrendas) GetRandom(n int) FormaColor {
 }
 
 //ConsultarColoresPrendas regresa los colores de prenda que tiene el usuario.
-func (u *Usuario) ConsultarColoresPrendas(prendas []Prenda) (cp ColoresPrendas) {
-	for _, prenda := range prendas {
+func ConsultarColoresPrendas(prendas []Prenda) (cp ColoresPrendas) {
+	//seleccion por genero
+	u := Usuario{ID: prendas[0].UsuarioID}
+	u.BuscarPorID()
+	//devuelve todos los colores prendas de ese genero
+	for _, prenda := range u.Prendas {
 		c := Color{ID: prenda.ColorID}
 		c.BuscarPorID()
 		fc := FormaColor{Tono: c.Tono, Brillo: prenda.Brillo}
