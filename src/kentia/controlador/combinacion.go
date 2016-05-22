@@ -33,6 +33,7 @@ func GenerarMejorCombinacion(idsPrendas []int) (prendas [][]modelo.Prenda) {
 	prendasSel := modelo.ObtenerPrendas(idsPrendas)
 	coloresPrendas := modelo.ConsultarColoresPrendas(prendasSel)
 	mejores := genetico.GeneticoMultiple(coloresPrendas, prendasSel)
+
 	for _, mejor := range mejores {
 		var combinacion []modelo.Prenda
 		for _, color := range mejor.Genotipo {
