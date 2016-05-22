@@ -38,12 +38,13 @@ func crearPoblacion(cp modelo.ColoresPrendas) (pob poblacion) {
 	return pob
 }
 
-func (p poblacion) mutarEvaluar(cp modelo.ColoresPrendas) poblacion {
+func (p poblacion) mutarEvaluar(cp modelo.ColoresPrendas, pr modelo.Prenda) poblacion {
 	for i := range p {
 		prob := rand.Float64()
 		if prob <= pm {
 			p[i].mutar(cp)
 		}
+		p[i].fijarPrenda(pr)
 		p[i].evaluar()
 	}
 	return p
@@ -88,16 +89,22 @@ func (p poblacion) crearHijos() (hijos poblacion) {
 }
 
 //Genetico genera el algoritmo génetico para combinar colores.
-func Genetico(cp modelo.ColoresPrendas) []Individuo {
+func Genetico(cp modelo.ColoresPrendas, prfija modelo.Prenda) []Individuo {
 	pob := crearPoblacion(cp)
 	ordenar(&pob)
 	for i := 0; i < generaciones; i++ {
 		hijos := pob.crearHijos()
-		hijos = hijos.mutarEvaluar(cp)
+		hijos = hijos.mutarEvaluar(cp, prfija)
+
 		pob = append(pob, hijos...)
 		pob = pob.elegirMejores()
 		fmt.Println("\nMejor generacion ", (i + 1))
 		fmt.Println("Genotipo: ", pob[0].Genotipo, " Aptitud total: ", pob[0].Aptitud)
 	}
 	return pob[:3]
+}
+
+//funcion para forzar que aparesca una prenda
+func (ind *Individuo) fijarPrenda(prfija modelo.Prenda) {
+	ind.Genotipo[prfija.TipoPrendaID] = prfija.ConsultarFormaColorPrenda()
 }

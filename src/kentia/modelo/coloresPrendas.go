@@ -57,3 +57,11 @@ func (u *Usuario) ConsultarColoresPrendas(prendas []Prenda) (cp ColoresPrendas) 
 	}
 	return cp
 }
+
+//ConsultarFormaColorPrenda recibe una prenda para obtener su forma color
+func (prenda Prenda) ConsultarFormaColorPrenda() (fc FormaColor) {
+	c := Color{ID: prenda.ColorID}
+	c.BuscarPorID()
+	fc = FormaColor{Tono: c.Tono, Brillo: prenda.Brillo}
+	return fc
+}
