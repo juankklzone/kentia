@@ -5,6 +5,7 @@ import (
 	"kentia/modelo"
 	"math/rand"
 	"sort"
+	"sync"
 )
 
 const (
@@ -102,6 +103,25 @@ func Genetico(cp modelo.ColoresPrendas, prfija modelo.Prenda) []Individuo {
 		fmt.Println("Genotipo: ", pob[0].Genotipo, " Aptitud total: ", pob[0].Aptitud)
 	}
 	return pob[:3]
+}
+
+//GeneticoMultiple recibe n prendas
+func GeneticoMultiple(cp modelo.ColoresPrendas, prendasFijadas []modelo.Prenda) []Individuo {
+	var prendas []Individuo
+	mtx := new(sync.Mutex)
+	wg := new(sync.WaitGroup)
+	wg.Add(len(prendas))
+	for i := range prendas {
+		go func(prenda modelo.Prenda) {
+			individuos := Genetico(cp, prenda)
+			mtx.Lock()
+			prendas = append(prendas, individuos...)
+			mtx.Unlock()
+			wg.Done()
+		}(prendasFijadas[i])
+	}
+	wg.Wait()
+	return prendas
 }
 
 //funcion para forzar que aparesca una prenda
