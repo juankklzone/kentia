@@ -4,9 +4,17 @@
         <servlet-name>registroPrenda</servlet-name>
         <servlet-class>servlets.registroPrenda</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>bajaPrenda</servlet-name>
+        <servlet-class>servlets.bajaPrenda</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>registroPrenda</servlet-name>
         <url-pattern>/registroPrenda</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>bajaPrenda</servlet-name>
+        <url-pattern>/bajaPrenda</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
