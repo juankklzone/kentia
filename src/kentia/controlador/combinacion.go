@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"kentia/genetico"
 	"kentia/modelo"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,13 +34,18 @@ func GenerarCombinacionGET(html *template.Template) gin.HandlerFunc {
 
 //GenerarMejorCombinacion se encarga de buscar cada una de las prendas por color y birllo para generar una combinacion.
 func GenerarMejorCombinacion(idsPrendas []int) (prendas [][]modelo.Prenda) {
+	tseleccionP := time.Now()
 	prendasSel := modelo.ObtenerPrendas(idsPrendas)
+	fmt.Println("tiempo para obtener prendas", time.Since(tseleccionP))
+	tcoloresPrendas := time.Now()
 	coloresPrendas := modelo.ConsultarColoresPrendas(prendasSel)
+	fmt.Println("timepo para colores prendas", time.Since(tcoloresPrendas))
 	mejores := genetico.GeneticoMultiple(coloresPrendas, prendasSel)
+	tmejores := time.Now()
 	for _, mejor := range mejores {
 		var combinacion []modelo.Prenda
 		for _, color := range mejor.Genotipo {
-			fmt.Println(color)
+			//fmt.Println(color)
 			prenda := modelo.Prenda{}
 			prenda.Brillo = color.Brillo
 			prenda.ColorID = color.Tono
@@ -59,7 +65,6 @@ func GenerarMejorCombinacion(idsPrendas []int) (prendas [][]modelo.Prenda) {
 		}
 		prendas = append(prendas, combinacion)
 	}
-
-	fmt.Println("prendas a combinar", len(prendas))
+	fmt.Println("tiempo para gen->prenda", time.Since(tmejores))
 	return prendas
 }

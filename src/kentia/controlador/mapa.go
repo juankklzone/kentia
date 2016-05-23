@@ -1,9 +1,6 @@
 package controlador
 
-import (
-	"fmt"
-	"kentia/modelo"
-)
+import "kentia/modelo"
 
 //MapaInfo se utiliza para mandarle datos a los templates.
 type MapaInfo map[string]interface{}
@@ -34,15 +31,15 @@ func (mapa MapaInfo) ObtenerDatosCombinacion(idsPrendas []int) {
 
 //ObtenDatosPrendas obtiene todas las prendas
 func (mapa MapaInfo) ObtenerDatosPrendas() {
-	fem := modelo.Usuario{ID: 1}
+	/*fem := modelo.Usuario{ID: 1}
 	ok := fem.BuscarPorID()
 	if !ok {
 		fmt.Println("puto!")
 	}
 	fmt.Print(fem)
 	masc := modelo.Usuario{ID: 2}
-	masc.BuscarPorID()
+	masc.BuscarPorID()*/
 	mapa.SetInformacion(
-		"prendas", append(masc.Prendas, fem.Prendas...),
+		"prendas", modelo.ConsultarPrendasPrecargadas(),
 	)
 }

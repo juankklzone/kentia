@@ -1,6 +1,9 @@
 package modelo
 
-import "kentia/log"
+import (
+	"fmt"
+	"kentia/log"
+)
 
 //Prenda define los datos importantes para una prenda.
 type Prenda struct {
@@ -95,10 +98,50 @@ func (p *Prenda) BuscaPorIDEnCatalogo(prendas []Prenda) {
 //ObtenerPrendas devuelve n prendas solicitadas
 func ObtenerPrendas(ids []int) (prendas []Prenda) {
 	prendas = make([]Prenda, len(ids))
-	for i, id := range ids {
-		pr := Prenda{ID: id}
-		pr.BuscarPorID()
-		prendas[i] = pr
+	if mapaPrendas == nil {
+		fmt.Println("no hay prendas precargadas")
+
+		for i, id := range ids {
+			pr := Prenda{ID: id}
+			pr.BuscarPorID()
+			prendas[i] = pr
+		}
+		return
+	}
+	for i, idp := range ids {
+		prendas[i] = mapaPrendas[idp]
 	}
 	return
+}
+
+var mapaPrendas map[int]Prenda
+var mapaColores map[int]Color
+var prendasMasc []Prenda
+var prendasFem []Prenda
+var todasPrendas []Prenda
+
+func init() {
+	prendas := ConsultarPrendas()
+	mapaPrendas = make(map[int]Prenda)
+	prendasFem = make([]Prenda, 0)
+	prendasMasc = make([]Prenda, 0)
+	for _, pr := range prendas {
+		mapaPrendas[pr.ID] = pr
+		if pr.UsuarioID == 1 {
+			prendasFem = append(prendasFem, pr)
+		} else {
+			prendasMasc = append(prendasMasc, pr)
+		}
+	}
+	mapaColores = make(map[int]Color)
+	colores := ConsultarColores()
+	for _, color := range colores {
+		mapaColores[color.ID] = color
+	}
+	todasPrendas = append(prendasMasc, prendasFem...)
+
+}
+
+func ConsultarPrendasPrecargadas() []Prenda {
+	return todasPrendas
 }

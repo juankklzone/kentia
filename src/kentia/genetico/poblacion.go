@@ -1,15 +1,17 @@
 package genetico
 
 import (
+	"fmt"
 	"kentia/modelo"
 	"math/rand"
 	"sort"
 	"sync"
+	"time"
 )
 
 const (
-	individuos   = 30
-	generaciones = 7
+	individuos   = 50
+	generaciones = 10
 	pm           = .1
 )
 
@@ -32,9 +34,11 @@ func ordenar(p *poblacion) {
 }
 
 func crearPoblacion(cp modelo.ColoresPrendas) (pob poblacion) {
+	now := time.Now()
 	for i := 0; i < individuos; i++ {
 		pob = append(pob, crearIndividuo(cp))
 	}
+	fmt.Println("tiempo para generar la población ", time.Since(now))
 	return pob
 }
 
@@ -111,6 +115,7 @@ func GeneticoMultiple(cp modelo.ColoresPrendas, prendasFijadas []modelo.Prenda) 
 	wg := new(sync.WaitGroup)
 	wg.Add(len(prendasFijadas))
 	//fmt.Println("iniciando ", len(prendasFijadas), " geneticos")
+	now := time.Now()
 	for i := range prendasFijadas {
 		go func(prenda modelo.Prenda) {
 			individuos := Genetico(cp, prenda)
@@ -123,6 +128,7 @@ func GeneticoMultiple(cp modelo.ColoresPrendas, prendasFijadas []modelo.Prenda) 
 		}(prendasFijadas[i])
 	}
 	wg.Wait()
+	fmt.Println("tiempo total genetico", time.Since(now))
 	return prendas
 }
 

@@ -1,9 +1,6 @@
 package modelo
 
-import (
-	"fmt"
-	"math/rand"
-)
+import "math/rand"
 
 //ColoresPrendas indica los colores de las prendas disponibles.
 type ColoresPrendas struct {
@@ -45,13 +42,19 @@ func (p ColoresPrendas) GetRandom(n int) FormaColor {
 //ConsultarColoresPrendas regresa los colores de prenda que tiene el usuario.
 func ConsultarColoresPrendas(prendas []Prenda) (cp ColoresPrendas) {
 	//seleccion por genero
-	fmt.Println("Genero", prendas[0].UsuarioID)
-	u := Usuario{ID: prendas[0].UsuarioID}
-	u.BuscarPorID()
+	genero := prendas[0].UsuarioID
+	var prendasGenero []Prenda
+	if genero == 1 {
+		prendasGenero = prendasFem
+	} else {
+		prendasGenero = prendasMasc
+	}
+	//u := Usuario{ID: prendas[0].UsuarioID}
+	//u.BuscarPorID()
+
 	//devuelve todos los colores prendas de ese genero
-	for _, prenda := range u.Prendas {
-		c := Color{ID: prenda.ColorID}
-		c.BuscarPorID()
+	for _, prenda := range prendasGenero {
+		c := mapaColores[prenda.ColorID]
 		fc := FormaColor{Foto: prenda.Foto, Tono: c.Tono, Brillo: prenda.Brillo}
 		switch prenda.TipoPrendaID {
 		case 1: //calzado
