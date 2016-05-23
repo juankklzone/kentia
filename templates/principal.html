@@ -48,7 +48,9 @@
               <ul class="sidebar-nav">
                   <li class="sidebar-brand">
                       <div class="col-lg-12">
-                      <img src="img/logo4.png" width="200" height="200" align="center"/>
+                      <a href="/principal">
+                        <img src="img/logo4.png" width="200" height="200" align="center"/>
+                      </a>
                     </div>
                   </li>
                   <li>
@@ -141,8 +143,10 @@
           e.preventDefault();
           $("#wrapper").toggleClass("toggled");
       });
+      var genero = 1;
 
       function mostrarPrendasMasc(){
+          genero = 2;
           $("img[genero='1']").hide();
           $("img[genero='2']").show();
           iconosMasc();
@@ -165,6 +169,7 @@
 
 
       function mostrarPrendasFem(){
+          genero = 1;
           $("img[genero='2']").hide();
           $("img[genero='1']").show();
           iconosFem();
@@ -177,22 +182,22 @@
               }
           } else{
               for (var i =0;i<=20;i++){
-                  $("img[color='"+i+"']").hide();
+                  $("img[color='"+i+"'][genero='"+genero+"']").hide();
               }
-              $("img[color='"+colorID+"']").show();
+              $("img[color='"+colorID+"'][genero='"+genero+"']").show();
           }
       }
 
        function filtrarTipo(tipo){
           if (tipo == -1){
               for (var i =1;i<5;i++){
-                  $("img[tipo='"+i+"']").show();
+                  $("img[tipo='"+i+"'][genero='"+genero+"']").show();
               }
           } else{
               for (var i =0;i<5;i++){
-                  $("img[tipo='"+i+"']").hide();
+                   $("img[tipo='"+i+"'][genero='"+genero+"']").hide();
               }
-              $("img[tipo='"+tipo+"']").show();
+               $("img[tipo='"+tipo+"'][genero='"+genero+"']").show();
           }
       }
       var listaSeleccionados = [];
