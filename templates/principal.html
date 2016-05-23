@@ -51,12 +51,54 @@
           <!-- Page Content -->
           <div id="page-content-wrapper">
               <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                    <div class="btn-group" role="group" aria-label="...">
+                        <a class="btn btn-default" onclick="javascript:mostrarPrendasFem()"><img width="60px" src="icons/female.png"></a>
+                        <a class="btn btn-default" onclick="javascript:mostrarPrendasMasc()"><img src="icons/male.png" width="60px"></a>                
+                    </div>
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="btn-group" role="group" aria-label="...">
+                            <a class="btn btn-default" onclick="javascript:filtrarTipo(1)"><img id="shoeicon" width="40px" src="icons/shoe-fem.jpg"></a>
+                            <a class="btn btn-default" onclick="javascript:filtrarTipo(3)"><img id="shirticon" src="icons/shirt-fem.png" width="40px"></a>  
+                            <a class="btn btn-default" onclick="javascript:filtrarTipo(2)"><img id="jeansicon" width="40px" src="icons/jeans-fem.png"></a>
+                            <a class="btn btn-default" onclick="javascript:filtrarTipo(4)"><img id="jacketicon" src="icons/jacket-fem.jpg" width="40px"></a>
+                            <button class="btn btn-success" onclick="javascript:filtrarTipo(-1)">Mostrar todos</button>                
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        
+                    </div>
+                </div>
+                <div class="row">
+                     <div class="col-lg-2" id="rueda" name="rueda">
+                      <img style="align:center"class="palet" src="img/colorwhel.svg" usemap="#PaletaMap" id="paleta" alt="paleta"/>
+                      <map name="PaletaMap">
+                        <area href="javascript:filtrarColor(1);" shape="poly" coords="130,120,75,20,130,5" data-alt="rojo" data-title="rojo"/>
+                        <area href="javascript:filtrarColor(2);" shape="poly" coords="140,115,135,3,195,20" data-alt="naranja" data-title="naranja"/>
+                        <area href="javascript:filtrarColor(3);" shape="poly" coords="150,120,200,25,240,65" data-alt="amarillo" data-title="amarillo"/>
+                        <area href="javascript:filtrarColor(4);" shape="poly" coords="150,130,260,130,245,70" data-alt="verdeamarillo" data-title="verde"/>
+                        <area href="javascript:filtrarColor(5);" shape="poly" coords="150,135,245,190,258,135" data-alt="verde" data-title="masverde"/>
+                        <area href="javascript:filtrarColor(6)" shape="poly" coords="150,145,200,240,240,195" data-alt="verdeazul" data-title="verdeazul"/>
+                        <area href="javascript:filtrarColor(7);" shape="poly" coords="140,145,135,260,195,240" data-alt="azul" data-title="azul"/>
+                        <area href="javascript:filtrarColor(8);" shape="poly" coords="130,140,75,245,130,255" data-alt="azulvioleta" data-title="azulmorado"/>
+                        <area href="javascript:filtrarColor(9);" shape="poly" coords="120,140,20,200,70,240" data-alt="vlioleta" data-title="morado"/>
+                        <area href="javascript:filtrarColor(10);" shape="poly" coords="120,135,20,195,5,135" data-alt="moradomalva" data-title="moradorosa"/>
+                        <area href="javascript:filtrarColor(11);" shape="poly" coords="125,130,10,130,20,70" data-alt="moradorosa" data-title="rosa"/>
+                        <area href="javascript:filtrarColor(12);" shape="poly" coords="120,120,25,65,70,23" data-alt="rosa" data-title="rosarojo"/>
+                      </map>
+                    </div>
+                </div>
                   <div class="row">
                       <div class="col-lg-12">
                         {{range $prendas}}
                           <img src="{{.Foto}}" onclick="javascript:seleccionarImagen({{.ID}})" prendaid={{.ID}} color={{.ColorID}} ocasion={{.OcasioniD}} genero={{.UsuarioID}} tipo={{.TipoPrendaID}} width="150" height="150"/>
                         {{end}}
-                          <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
                           <button onclick="javascript:location.href='/generarCombinacion'" class="btn btn-primary">Generar combinación</button>
                       </div>
                   </div>
@@ -83,20 +125,37 @@
       function mostrarPrendasMasc(){
           $("img[genero='1']").hide();
           $("img[genero='2']").show();
+          iconosMasc();
       }
+      
+      function iconosMasc(){
+          $("#shoeicon").prop("src","icons/shoe-male.png");
+          $("#shirticon").prop("src","icons/shirt-male.png");
+          $("#jeansicon").prop("src","icons/jeans-male.jpg");
+          $("#jacketicon").prop("src","icons/jacket-male.jpg");
+      }
+      
+      function iconosFem(){
+          $("#shoeicon").prop("src","icons/shoe-fem.jpg");
+          $("#shirticon").prop("src","icons/shirt-fem.png");
+          $("#jeansicon").prop("src","icons/jeans-fem.png");
+          $("#jacketicon").prop("src","icons/jacket-fem.jpg");
+      }
+      
       
       function mostrarPrendasFem(){
           $("img[genero='2']").hide();
           $("img[genero='1']").show();
+          iconosFem();
       }
       
       function filtrarColor(colorID){
           if (colorID == -1){
-              for (var i =0;i<20;i++){
+              for (var i =0;i<17;i++){
                   $("img[color='"+i+"']").show();
               } 
           } else{
-              for (var i =0;i<20;i++){
+              for (var i =0;i<17;i++){
                   $("img[color='"+i+"']").hide();
               } 
               $("img[color='"+colorID+"']").show();
