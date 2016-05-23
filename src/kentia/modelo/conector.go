@@ -9,10 +9,10 @@ import (
 
 //Conector Go -> Mysql que permite obtener sesiones en una bd.
 type conector struct {
-	db gorm.DB
+	db *gorm.DB
 }
 
-const dburl = "root:@/kentia?charset=utf8&parseTime=True&loc=Local"
+const dburl = "root:cocoro@tcp(alepht.com:8080)/kentia?charset=utf8&parseTime=True&loc=Local"
 
 // Realiza una conexión al servidor server y selecciona la BD de kentia
 func conectar() (c *conector) {

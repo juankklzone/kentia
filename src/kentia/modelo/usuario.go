@@ -19,7 +19,7 @@ const coleccionUsuario = "usuario"
 func (u *Usuario) Registrar() bool {
 	conn := conectar()
 	defer conn.desconectar()
-	err := conn.db.Create(u).Error
+	err := conn.db.Debug().Create(u).Error
 	if err != nil {
 		log.RegistrarError(err)
 		return false
@@ -47,6 +47,10 @@ func ConsultarUsuarios() (usuarios []Usuario) {
 	if err != nil {
 		log.RegistrarError(err)
 	}
+	for i := range usuarios {
+		conn.db.Model(&usuarios[i]).Related(&usuarios[i].Prendas)
+		conn.db.Model(&usuarios[i]).Related(&usuarios[i].Combinaciones)
+	}
 	return usuarios
 }
 
@@ -67,6 +71,8 @@ func (u *Usuario) BuscarPorID() bool {
 	conn := conectar()
 	defer conn.desconectar()
 	err := conn.db.Find(u).First(u).Error
+	conn.db.Model(u).Related(&u.Prendas)
+	conn.db.Model(u).Related(&u.Combinaciones)
 	if err != nil {
 		log.RegistrarError(err)
 		return false

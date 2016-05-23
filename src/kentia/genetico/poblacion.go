@@ -1,15 +1,15 @@
 package genetico
 
 import (
-	"fmt"
 	"kentia/modelo"
 	"math/rand"
 	"sort"
+	"sync"
 )
 
 const (
 	individuos   = 100
-	generaciones = 100
+	generaciones = 10
 	pm           = .1
 )
 
@@ -38,12 +38,13 @@ func crearPoblacion(cp modelo.ColoresPrendas) (pob poblacion) {
 	return pob
 }
 
-func (p poblacion) mutarEvaluar(cp modelo.ColoresPrendas) poblacion {
+func (p poblacion) mutarEvaluar(cp modelo.ColoresPrendas, fc modelo.FormaColor, tipoID int) poblacion {
 	for i := range p {
 		prob := rand.Float64()
 		if prob <= pm {
 			p[i].mutar(cp)
 		}
+		p[i].Genotipo[tipoID] = fc
 		p[i].evaluar()
 	}
 	return p
@@ -88,16 +89,44 @@ func (p poblacion) crearHijos() (hijos poblacion) {
 }
 
 //Genetico genera el algoritmo génetico para combinar colores.
-func Genetico(cp modelo.ColoresPrendas) []Individuo {
+func Genetico(cp modelo.ColoresPrendas, prfija modelo.Prenda) []Individuo {
 	pob := crearPoblacion(cp)
 	ordenar(&pob)
+	foColor := prfija.ConsultarFormaColorPrenda()
 	for i := 0; i < generaciones; i++ {
 		hijos := pob.crearHijos()
-		hijos = hijos.mutarEvaluar(cp)
+		hijos = hijos.mutarEvaluar(cp, foColor, prfija.TipoPrendaID)
 		pob = append(pob, hijos...)
 		pob = pob.elegirMejores()
-		fmt.Println("\nMejor generacion ", (i + 1))
-		fmt.Println("Genotipo: ", pob[0].Genotipo, " Aptitud total: ", pob[0].Aptitud)
+		//fmt.Println("\nMejor generacion ", (i + 1))
+		//fmt.Println("Genotipo: ", pob[0].Genotipo, " Aptitud total: ", pob[0].Aptitud)
 	}
 	return pob[:3]
+}
+
+//GeneticoMultiple recibe n prendas
+func GeneticoMultiple(cp modelo.ColoresPrendas, prendasFijadas []modelo.Prenda) []Individuo {
+	var prendas []Individuo
+	mtx := new(sync.Mutex)
+	wg := new(sync.WaitGroup)
+	wg.Add(len(prendasFijadas))
+	//fmt.Println("iniciando ", len(prendasFijadas), " geneticos")
+	for i := range prendasFijadas {
+		go func(prenda modelo.Prenda) {
+			individuos := Genetico(cp, prenda)
+			mtx.Lock()
+			prendas = append(prendas, individuos...)
+			mtx.Unlock()
+			wg.Done()
+			//fmt.Println("terminando con prenda fijada", prenda)
+			//fmt.Println("prendas guardadas ", prendas)
+		}(prendasFijadas[i])
+	}
+	wg.Wait()
+	return prendas
+}
+
+//funcion para forzar que aparesca una prenda
+func (ind *Individuo) fijarPrenda(prfija modelo.Prenda) {
+	ind.Genotipo[prfija.TipoPrendaID] = prfija.ConsultarFormaColorPrenda()
 }

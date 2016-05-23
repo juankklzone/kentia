@@ -1,6 +1,9 @@
 package modelo
 
-import "math/rand"
+import (
+	"fmt"
+	"math/rand"
+)
 
 //ColoresPrendas indica los colores de las prendas disponibles.
 type ColoresPrendas struct {
@@ -12,6 +15,7 @@ type ColoresPrendas struct {
 
 //FormaColor informacion básica de un color para una prenda.
 type FormaColor struct {
+	Foto   string
 	Tono   int
 	Brillo int
 }
@@ -39,19 +43,32 @@ func (p ColoresPrendas) GetRandom(n int) FormaColor {
 }
 
 //ConsultarColoresPrendas regresa los colores de prenda que tiene el usuario.
-func (u *Usuario) ConsultarColoresPrendas() (cp ColoresPrendas) {
+func ConsultarColoresPrendas(prendas []Prenda) (cp ColoresPrendas) {
+	//seleccion por genero
+	fmt.Println("Genero", prendas[0].UsuarioID)
+	u := Usuario{ID: prendas[0].UsuarioID}
+	u.BuscarPorID()
+	//devuelve todos los colores prendas de ese genero
 	for _, prenda := range u.Prendas {
-		fc := FormaColor{Tono: prenda.Color.Tono, Brillo: prenda.Brillo}
-		switch prenda.TipoPrenda.Nombre {
-		case "Calzado":
+		c := Color{ID: prenda.ColorID}
+		c.BuscarPorID()
+		fc := FormaColor{Foto: prenda.Foto, Tono: c.Tono, Brillo: prenda.Brillo}
+		switch prenda.TipoPrendaID {
+		case 1: //calzado
 			cp.Calzado = append(cp.Calzado, fc)
-		case "Pantalon/Falda":
+		case 2: //pantalon
 			cp.Pantalon = append(cp.Pantalon, fc)
-		case "Playera":
+		case 3: //playera
 			cp.Playera = append(cp.Playera, fc)
-		case "Chamarra":
+		case 4: //chamarra
 			cp.Chamarra = append(cp.Chamarra, fc)
 		}
 	}
 	return cp
+}
+
+//ConsultarFormaColorPrenda recibe una prenda para obtener su forma color
+func (prenda Prenda) ConsultarFormaColorPrenda() (fc FormaColor) {
+	fc = FormaColor{Foto: prenda.Foto, Tono: prenda.ColorID, Brillo: prenda.Brillo}
+	return fc
 }

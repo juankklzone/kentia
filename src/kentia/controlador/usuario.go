@@ -13,17 +13,23 @@ import (
 //Login es la función que se encarga de comprobar las credenciales de los usuarios.
 func Login(html *template.Template) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		fmt.Println("Entrando a /login")
 		session := sessions.Default(c)
 		usuario := modelo.Usuario{}
 		c.Bind(&usuario)
 
 		isOk := usuario.IniciarSesion()
 		if !isOk {
-			session.Set("UsuarioID", "0")
+			fmt.Println("no se pudo iniciar sesion")
+			session.Set("UsuarioID", 0)
+			session.Save()
+			c.Redirect(http.StatusSeeOther, "/registroPrenda")
+		} else {
+			fmt.Println("Sesion iniciada")
+			session.Set("UsuarioID", usuario.ID)
+			session.Save()
+			c.Redirect(http.StatusSeeOther, "/")
 		}
-		session.Set("UsuarioID", usuario.ID)
-		session.Save()
-		c.Redirect(http.StatusSeeOther, "/")
 		return
 	}
 }

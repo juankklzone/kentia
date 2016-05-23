@@ -1,6 +1,7 @@
 package controlador
 
 import (
+	"fmt"
 	"kentia/modelo"
 )
 
@@ -25,8 +26,23 @@ func (mapa MapaInfo) ObtenerDatosRegistroPrenda() {
 }
 
 //ObtenerDatosCombinacion obtiene los datos para mostrar en el template.
-func (mapa MapaInfo) ObtenerDatosCombinacion(usuarioID int) {
+func (mapa MapaInfo) ObtenerDatosCombinacion(idsPrendas []int) {
 	mapa.SetInformacion(
-		"mejores", GenerarMejorCombinacion(usuarioID),
+		"mejores", GenerarMejorCombinacion(idsPrendas),
+	)
+}
+
+//ObtenDatosPrendas obtiene todas las prendas
+func (mapa MapaInfo) ObtenerDatosPrendas() {
+	fem := modelo.Usuario{ID: 1}
+	ok := fem.BuscarPorID()
+	if !ok {
+		fmt.Println("puto!")
+	}
+	fmt.Print(fem)
+	masc := modelo.Usuario{ID: 2}
+	masc.BuscarPorID()
+	mapa.SetInformacion(
+		"prendas", append(masc.Prendas, fem.Prendas...),
 	)
 }

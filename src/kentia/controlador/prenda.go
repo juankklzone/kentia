@@ -1,13 +1,10 @@
 package controlador
 
 import (
-	"fmt"
 	"html/template"
 	"kentia/modelo"
-	"strconv"
 	"strings"
 
-	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,8 +24,8 @@ func guadarImagen(c *gin.Context, p *modelo.Prenda) {
 	data, _ := ioutil.ReadAll(file)
 
 	ruta := "/img/foto" + p.ID.Hex() + ".png"*/
-	ruta, _ := c.Get("foto")
-	p.Foto = ruta.(string)
+	ruta := c.PostForm("foto")
+	p.Foto = ruta
 
 	/*out, err := os.Create("public" + p.Foto)
 	if err != nil {
@@ -45,47 +42,44 @@ func guadarImagen(c *gin.Context, p *modelo.Prenda) {
 }
 
 //RegistroPrendaPOST recibe el formulario y se encarga de registrarlo en la BD.
-func RegistroPrendaPOST() gin.HandlerFunc {
+/*func RegistroPrendaPOST() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		usuarioID := GetSession(sessions.Default(c).Get("UsuarioID"))
+		fmt.Println("usuarioID", usuarioID)
 		uID, _ := strconv.Atoi(usuarioID)
-		if usuarioID != "0" {
-			var p modelo.Prenda
-			if c.Bind(&p) == nil {
-				u := modelo.Usuario{ID: uID}
-				if u.BuscarPorID() {
-					//p.ID = bson.NewObjectId()
-					p.Color.BuscarPorTono()
+		//if usuarioID != "0" { yolo
+		var p modelo.Prenda
+		if c.Bind(&p) == nil {
+			u := modelo.Usuario{ID: uID}
+			if u.BuscarPorID() {
+				//p.ID = bson.NewObjectId()
+				p.Color =
+				p.Color.BuscarPorTono()
 
-					p.Clima.ID, _ = strconv.Atoi(c.PostForm("clima"))
-					p.Clima.BuscarPorID()
+				p.Clima.ID, _ = strconv.Atoi(c.PostForm("clima"))
+				p.Clima.BuscarPorID()
+				p.TipoPrendaID, _ = strconv.Atoi(c.PostForm("tipoPrenda"))
+				//				p.TipoPrenda.BuscarPorID()
 
-					p.TipoPrenda.ID, _ = strconv.Atoi(c.PostForm("tipoPrenda"))
-					p.TipoPrenda.BuscarPorID()
+				p.OcasionID, _ = strconv.Atoi(c.PostForm("ocasion"))
+				//p.Ocasion.BuscarPorID()
 
-					p.Ocasion.ID, _ = strconv.Atoi(c.PostForm("ocasion"))
-					p.Ocasion.BuscarPorID()
+				guadarImagen(c, &p)
 
-					guadarImagen(c, &p)
-
-					u.Prendas = append(u.Prendas, p)
-					if u.Modificar() {
-						//BIEN
-						fmt.Println(u)
-					} else {
-						fmt.Println("ALGO MAL", u)
-					}
+				u.Prendas = append(u.Prendas, p)
+				if u.Modificar() {
+					//BIEN
+					fmt.Println("se registro la prenda", u)
+					c.Redirect(302, "/registroPrenda")
 				} else {
-					//No se encontró el usuario D:
-					fmt.Println(u)
+					fmt.Println("ALGO MAL", u)
+					c.Redirect(302, "/")
 				}
 			} else {
 				fmt.Println("Algo salió mal")
 			}
 			return
 		}
-		c.Redirect(302, "/")
-		return
 	}
 }
 
@@ -94,5 +88,13 @@ func RegistroPrendaGET(html *template.Template) gin.HandlerFunc {
 		mapa := MapaInfo{}
 		mapa.ObtenerDatosRegistroPrenda()
 		html.ExecuteTemplate(c.Writer, "registroPrenda.html", mapa)
+	}
+}
+*/
+func MuestraPrendasGET(html *template.Template) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		mapa := MapaInfo{}
+		mapa.ObtenerDatosPrendas()
+		html.ExecuteTemplate(c.Writer, "principal.html", mapa)
 	}
 }
