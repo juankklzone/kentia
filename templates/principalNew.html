@@ -7,7 +7,6 @@
     <title>Principal</title>
     <link href="bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
-    <script type="text/javascript" src="js/jquery.imagemapster.js"></script>
     <link href="css/sidebar.css" rel="stylesheet">
   </head>
   <body>
@@ -20,55 +19,62 @@
           <div id="sidebar-wrapper">
               <ul class="sidebar-nav">
                   <li class="sidebar-brand">
-                      <div class="col-lg-12">
-                      <img src="img/logo4.png" width="200" height="200" align="center"/>
-                    </div>
+                      <a href="#">
+                          Start Bootstrap
+                      </a>
                   </li>
                   <li>
-                    <div class="col-lg-12">
-                    <div class="btn-group" role="group" aria-label="...">
-                        <a class="btn" onclick="javascript:mostrarPrendasFem()"><img width="60px" src="icons/female.png"></a>
-                        <a class="btn" onclick="javascript:mostrarPrendasMasc()"><img src="icons/male.png" width="60px"></a>
-                    </div>
+                      <a href="#">Dashboard</a>
                   </li>
                   <li>
-                    <div class="col-lg-12">
-                      <a class="btn" onclick="javascript:filtrarTipo(1)"><img id="shoeicon" width="40px" src="icons/shoe-fem.jpg"></a>
-                    </div>
+                      <a href="#">Shortcuts</a>
                   </li>
                   <li>
-                    <div class="col-lg-12">
-                      <a class="btn" onclick="javascript:filtrarTipo(3)"><img id="shirticon" src="icons/shirt-fem.png" width="40px"></a>
-                    </div>
+                      <a href="#">Overview</a>
                   </li>
                   <li>
-                    <div class="col-lg-12">
-                      <a class="btn" onclick="javascript:filtrarTipo(2)"><img id="jeansicon" width="40px" src="icons/jeans-fem.png"></a>
-                    </div>
+                      <a href="#">Events</a>
                   </li>
                   <li>
-                    <div class="col-lg-12">
-                      <a class="btn" onclick="javascript:filtrarTipo(4)"><img id="jacketicon" src="icons/jacket-fem.jpg" width="40px"></a>
-                    </div>
+                      <a href="#">About</a>
                   </li>
                   <li>
-                    <div class="col-lg-12">
-                      <button class="btn btn-success" onclick="javascript:filtrarTipo(-1)">Mostrar todos</button>
-                    <div>
+                      <a href="#">Services</a>
                   </li>
                   <li>
-                    <div class="col-lg-12">
-                        <button onclick="javascript:solicitarCombinaciones()" class="btn btn-primary">Generar combinación</button>
-                  </div>
+                      <a href="#">Contact</a>
                   </li>
               </ul>
           </div>
-          
           <!-- /#sidebar-wrapper -->
 
           <!-- Page Content -->
           <div id="page-content-wrapper">
-              <div class="container-fluid" id="panel-principal">
+              <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                    <div class="btn-group" role="group" aria-label="...">
+                        <a class="btn btn-default" onclick="javascript:mostrarPrendasFem()"><img width="60px" src="icons/female.png"></a>
+                        <a class="btn btn-default" onclick="javascript:mostrarPrendasMasc()"><img src="icons/male.png" width="60px"></a>                
+                    </div>
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="btn-group" role="group" aria-label="...">
+                            <a class="btn btn-default" onclick="javascript:filtrarTipo(1)"><img id="shoeicon" width="40px" src="icons/shoe-fem.jpg"></a>
+                            <a class="btn btn-default" onclick="javascript:filtrarTipo(3)"><img id="shirticon" src="icons/shirt-fem.png" width="40px"></a>  
+                            <a class="btn btn-default" onclick="javascript:filtrarTipo(2)"><img id="jeansicon" width="40px" src="icons/jeans-fem.png"></a>
+                            <a class="btn btn-default" onclick="javascript:filtrarTipo(4)"><img id="jacketicon" src="icons/jacket-fem.jpg" width="40px"></a>
+                            <button class="btn btn-success" onclick="javascript:filtrarTipo(-1)">Mostrar todos</button>                
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        
+                    </div>
+                </div>
                 <div class="row">
                      <div class="col-lg-2" id="rueda" name="rueda">
                       <img style="align:center"class="palet" src="img/colorwhel.svg" usemap="#PaletaMap" id="paleta" alt="paleta"/>
@@ -92,7 +98,8 @@
                       <div class="col-lg-12">
                         {{range $prendas}}
                           <img src="{{.Foto}}" onclick="javascript:seleccionarImagen({{.ID}})" prendaid={{.ID}} color={{.ColorID}} ocasion={{.OcasioniD}} genero={{.UsuarioID}} tipo={{.TipoPrendaID}} width="150" height="150"/>
-                        {{end}}                          
+                        {{end}}
+                          <button onclick="javascript:location.href='/generarCombinacion'" class="btn btn-primary">Generar combinación</button>
                       </div>
                   </div>
               </div>
@@ -114,21 +121,20 @@
           e.preventDefault();
           $("#wrapper").toggleClass("toggled");
       });
-
+      
       function mostrarPrendasMasc(){
           $("img[genero='1']").hide();
           $("img[genero='2']").show();
           iconosMasc();
-
       }
-
+      
       function iconosMasc(){
           $("#shoeicon").prop("src","icons/shoe-male.png");
           $("#shirticon").prop("src","icons/shirt-male.png");
           $("#jeansicon").prop("src","icons/jeans-male.jpg");
           $("#jacketicon").prop("src","icons/jacket-male.jpg");
       }
-
+      
       function iconosFem(){
           $("#shoeicon").prop("src","icons/shoe-fem.jpg");
           $("#shirticon").prop("src","icons/shirt-fem.png");
@@ -136,65 +142,47 @@
           $("#jacketicon").prop("src","icons/jacket-fem.jpg");
       }
       
-
+      
       function mostrarPrendasFem(){
           $("img[genero='2']").hide();
           $("img[genero='1']").show();
           iconosFem();
       }
-
+      
       function filtrarColor(colorID){
           if (colorID == -1){
-              for (var i =0;i<=20;i++){
+              for (var i =0;i<17;i++){
                   $("img[color='"+i+"']").show();
-              }
+              } 
           } else{
-              for (var i =0;i<=20;i++){
+              for (var i =0;i<17;i++){
                   $("img[color='"+i+"']").hide();
-              }
+              } 
               $("img[color='"+colorID+"']").show();
           }
       }
-
+      
        function filtrarTipo(tipo){
           if (tipo == -1){
               for (var i =1;i<5;i++){
                   $("img[tipo='"+i+"']").show();
-              }
+              } 
           } else{
               for (var i =0;i<5;i++){
                   $("img[tipo='"+i+"']").hide();
-              }
+              } 
               $("img[tipo='"+tipo+"']").show();
           }
       }
       var listaSeleccionados = [];
-
+      
       function seleccionarImagen(id){
         listaSeleccionados.push(id);
-      }
-
-      function limpiarSeleccion(id){
-          listaSeleccionados = [];
+        console.log(listaSeleccionados);
       }
       
-      function solicitarCombinaciones(){
-          console.log("procesando datos...");
-          $.ajax(
-              {
-                  url:"/generarCombinacion",
-                  data:JSON.stringify({Lista:listaSeleccionados}),
-                  method:"POST",
-                  error:function(err){
-                      console.log(err);
-                      alert("Lo sentimos, algo salió mal :(");
-                  },
-                  success:function(data,status){
-                      console.log(data);
-                      document.getElementById("panel-principal").innerHTML = data;
-                  }
-              }
-          );
+      function limpiarSeleccion(id){
+          listaSeleccionados = [];
       }
       </script>
 

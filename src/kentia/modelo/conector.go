@@ -14,11 +14,13 @@ type conector struct {
 
 const dburl = "root:cocoro@tcp(alepht.com:8080)/kentia?charset=utf8&parseTime=True&loc=Local"
 
+//const dburl = "root:@/kentia?charset=utf8&parseTime=True&loc=Local"
+
 // Realiza una conexión al servidor server y selecciona la BD de kentia
 func conectar() (c *conector) {
 	bd, err := gorm.Open("mysql", dburl)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("error suyo de el", err)
 		return nil
 	}
 	return &conector{db: bd}
