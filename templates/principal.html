@@ -5,9 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Principal</title>
-    <link href="bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
-    <script type="text/javascript" src="js/jquery.imagemapster.js"></script>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <style>
+  .carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+      width: 70%;
+      margin: auto;
+  }
+  </style>
     <link href="css/sidebar.css" rel="stylesheet">
   </head>
   <body>
@@ -63,7 +70,7 @@
                   </li>
               </ul>
           </div>
-          
+
           <!-- /#sidebar-wrapper -->
 
           <!-- Page Content -->
@@ -92,7 +99,7 @@
                       <div class="col-lg-12">
                         {{range $prendas}}
                           <img src="{{.Foto}}" onclick="javascript:seleccionarImagen({{.ID}})" prendaid={{.ID}} color={{.ColorID}} ocasion={{.OcasioniD}} genero={{.UsuarioID}} tipo={{.TipoPrendaID}} width="150" height="150"/>
-                        {{end}}                          
+                        {{end}}
                       </div>
                   </div>
               </div>
@@ -135,7 +142,7 @@
           $("#jeansicon").prop("src","icons/jeans-fem.png");
           $("#jacketicon").prop("src","icons/jacket-fem.jpg");
       }
-      
+
 
       function mostrarPrendasFem(){
           $("img[genero='2']").hide();
@@ -177,7 +184,7 @@
       function limpiarSeleccion(id){
           listaSeleccionados = [];
       }
-      
+
       function solicitarCombinaciones(){
           console.log("procesando datos...");
           $.ajax(
