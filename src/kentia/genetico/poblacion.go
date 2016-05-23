@@ -48,7 +48,7 @@ func (p poblacion) mutarEvaluar(cp modelo.ColoresPrendas, fc modelo.FormaColor, 
 		if prob <= pm {
 			p[i].mutar(cp)
 		}
-		p[i].Genotipo[tipoID] = fc
+		p[i].Genotipo[tipoID-1] = fc
 		p[i].evaluar()
 	}
 	return p
