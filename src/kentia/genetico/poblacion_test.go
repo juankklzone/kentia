@@ -1,7 +1,6 @@
 package genetico
 
 import (
-	"fmt"
 	"kentia/modelo"
 	"math/rand"
 	"testing"
@@ -29,6 +28,6 @@ func TestCrearPoblacion(t *testing.T) {
 		cp.Pantalon[i].Brillo = rand.Intn(5)
 		cp.Playera[i].Brillo = rand.Intn(5)
 	}
-	mejores := Genetico(cp)
-	fmt.Println("\nLo mejor de lo mejor de lo mejor de lo mejor de lo mejor de lo mejor de lo mejor de lo mejor:\n", mejores[0], "\n", mejores[1], "\n", mejores[2])
+	//mejores := Genetico(cp)
+	//fmt.Println("\nLo mejor de lo mejor de lo mejor de lo mejor de lo mejor de lo mejor de lo mejor de lo mejor:\n", mejores[0], "\n", mejores[1], "\n", mejores[2])
 }
