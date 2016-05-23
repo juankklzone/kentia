@@ -15,9 +15,9 @@ type ColoresPrendas struct {
 
 //FormaColor informacion básica de un color para una prenda.
 type FormaColor struct {
-	IDPrenda int
-	Tono     int
-	Brillo   int
+	Foto   string
+	Tono   int
+	Brillo int
 }
 
 //GetColores regresa los colores de una prenda en específico.
@@ -52,7 +52,7 @@ func ConsultarColoresPrendas(prendas []Prenda) (cp ColoresPrendas) {
 	for _, prenda := range u.Prendas {
 		c := Color{ID: prenda.ColorID}
 		c.BuscarPorID()
-		fc := FormaColor{IDPrenda: prenda.ID, Tono: c.Tono, Brillo: prenda.Brillo}
+		fc := FormaColor{Foto: prenda.Foto, Tono: c.Tono, Brillo: prenda.Brillo}
 		switch prenda.TipoPrendaID {
 		case 1: //calzado
 			cp.Calzado = append(cp.Calzado, fc)
@@ -69,8 +69,6 @@ func ConsultarColoresPrendas(prendas []Prenda) (cp ColoresPrendas) {
 
 //ConsultarFormaColorPrenda recibe una prenda para obtener su forma color
 func (prenda Prenda) ConsultarFormaColorPrenda() (fc FormaColor) {
-	c := Color{ID: prenda.ColorID}
-	c.BuscarPorID()
-	fc = FormaColor{IDPrenda: prenda.ID, Tono: c.Tono, Brillo: prenda.Brillo}
+	fc = FormaColor{Foto: prenda.Foto, Tono: prenda.ColorID, Brillo: prenda.Brillo}
 	return fc
 }

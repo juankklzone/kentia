@@ -1,7 +1,6 @@
 package genetico
 
 import (
-	"fmt"
 	"kentia/modelo"
 	"math/rand"
 	"sort"
@@ -99,8 +98,8 @@ func Genetico(cp modelo.ColoresPrendas, prfija modelo.Prenda) []Individuo {
 		hijos = hijos.mutarEvaluar(cp, foColor, prfija.TipoPrendaID)
 		pob = append(pob, hijos...)
 		pob = pob.elegirMejores()
-		fmt.Println("\nMejor generacion ", (i + 1))
-		fmt.Println("Genotipo: ", pob[0].Genotipo, " Aptitud total: ", pob[0].Aptitud)
+		//fmt.Println("\nMejor generacion ", (i + 1))
+		//fmt.Println("Genotipo: ", pob[0].Genotipo, " Aptitud total: ", pob[0].Aptitud)
 	}
 	return pob[:3]
 }
@@ -111,7 +110,7 @@ func GeneticoMultiple(cp modelo.ColoresPrendas, prendasFijadas []modelo.Prenda) 
 	mtx := new(sync.Mutex)
 	wg := new(sync.WaitGroup)
 	wg.Add(len(prendasFijadas))
-	fmt.Println("iniciando ", len(prendasFijadas), " geneticos")
+	//fmt.Println("iniciando ", len(prendasFijadas), " geneticos")
 	for i := range prendasFijadas {
 		go func(prenda modelo.Prenda) {
 			individuos := Genetico(cp, prenda)
@@ -119,8 +118,8 @@ func GeneticoMultiple(cp modelo.ColoresPrendas, prendasFijadas []modelo.Prenda) 
 			prendas = append(prendas, individuos...)
 			mtx.Unlock()
 			wg.Done()
-			fmt.Println("terminando con prenda fijada", prenda)
-			fmt.Println("prendas guardadas ", prendas)
+			//fmt.Println("terminando con prenda fijada", prenda)
+			//fmt.Println("prendas guardadas ", prendas)
 		}(prendasFijadas[i])
 	}
 	wg.Wait()
