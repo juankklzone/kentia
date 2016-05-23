@@ -25,6 +25,7 @@ func GenerarCombinacionGET(html *template.Template) gin.HandlerFunc {
 		}
 		fmt.Println("Lista de ids seleccionados", lp)
 		mapa.ObtenerDatosCombinacion(lp.Lista)
+		//mapa.ObtenerDatosCombinacion(arr)
 		//fmt.Println("datos para la combinación", mapa)
 		html.ExecuteTemplate(c.Writer, "combinacion.html", mapa)
 		//c.Redirect(http.StatusTemporaryRedirect, "/")
