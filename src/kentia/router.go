@@ -43,12 +43,8 @@ func main() {
 	servidor.GET("/combinacion", func(c *gin.Context) {
 		html.ExecuteTemplate(c.Writer, "combinacion.html", nil)
 	})
-	//servidor.GET("/registroPrenda", controlador.RegistroPrendaGET(html))
 	servidor.GET("/principal", controlador.MuestraPrendasGET(html))
-	servidor.GET("/", controlador.Index())
-	//servidor.POST("/login", controlador.Login(html))
-	//servidor.POST("/registroUsuario", controlador.RegistroUsuario())
-	//servidor.POST("/registroPrenda", controlador.RegistroPrendaPOST())
+	servidor.GET("/", controlador.MuestraPrendasGET(html))
 	servidor.POST("/generarCombinacion", controlador.GenerarCombinacionGET(html))
-	servidor.Run(":3000")
+	servidor.Run(":6060")
 }
