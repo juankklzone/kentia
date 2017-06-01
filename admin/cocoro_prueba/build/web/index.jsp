@@ -11,16 +11,16 @@
     String driver="com.mysql.jdbc.Driver";
     String url="jdbc:mysql://localhost:3306/cocoro";
     String user="root";
-    String pwd="lima";
+    String pwd="LarzRS";
 %>
 <%  
     PreparedStatement ps = null;
     ResultSet rs = null;
     //querys para llenar los combobox con las diferentes caracteristicas de la prenda
-    String query1 = "SELECT * from cocoro.clima";
-    String query2 = "SELECT * from cocoro.color";
-    String query3 = "SELECT * from cocoro.ocasion";
-    String query4 = "SELECT * from cocoro.tipo_prenda";
+    String query1 = "SELECT * from cocoro.climas";
+    String query2 = "SELECT * from cocoro.colors";
+    String query3 = "SELECT * from cocoro.ocasions";
+    String query4 = "SELECT * from cocoro.tipo_prendas";
     //se inicia la conexion
     if(conexion == null){
         Class.forName(driver).newInstance();
@@ -51,7 +51,7 @@
                     rs = ps.executeQuery();
                     while(rs.next()) {
              %>
-             <option value="<%= rs.getString("idClima") %>"><%= rs.getString("Nombre") %></option>
+             <option value="<%= rs.getString("id") %>"><%= rs.getString("Nombre") %></option>
              <%
                 }
             %>
@@ -64,7 +64,7 @@
                     rs = ps.executeQuery();
                     while(rs.next()) {
              %>
-             <option value="<%= rs.getString("idColor") %>"><%= rs.getString("Nombre") %></option>
+             <option value="<%= rs.getString("id") %>"><%= rs.getString("Nombre") %></option>
              <%
                 }
             %>
@@ -77,7 +77,7 @@
                     rs = ps.executeQuery();
                     while(rs.next()) {
              %>
-             <option value="<%= rs.getString("idOcasion") %>"><%= rs.getString("Nombre") %></option>
+             <option value="<%= rs.getString("id") %>"><%= rs.getString("Nombre") %></option>
              <%
                 }
             %>
@@ -90,7 +90,7 @@
                     rs = ps.executeQuery();
                     while(rs.next()) {
              %>
-             <option value="<%= rs.getString("idTipo_prenda") %>"><%= rs.getString("tipo_prendacol") %></option>
+             <option value="<%= rs.getString("id") %>"><%= rs.getString("nombre") %></option>
              <%
                 }
             %>
